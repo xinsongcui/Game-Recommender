@@ -58,7 +58,8 @@ app.get('/', (req, res) => {
 
     //Redirect back to front end
     res.writeHead(302, {
-        Location: 'http://localhost:3000'
+        //Location: 'http://localhost:3000'
+        Location: "https://gamesothis.web.app"
     });
     res.end(); 
 });
