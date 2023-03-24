@@ -23,8 +23,8 @@ passport.serializeUser((user, done) => {
    });
    // Initiate Strategy
    passport.use(new SteamStrategy({
-    returnURL: 'http://localhost:' + port + '/api/auth/steam/return',
-    realm: 'http://localhost:' + port + '/',
+    returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
+    realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
     apiKey: 'E3ECE458BA26350EAF264840A63BF51E'
     }, function (identifier, profile, done) {
      process.nextTick(function () {
