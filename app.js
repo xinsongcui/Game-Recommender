@@ -109,13 +109,13 @@ app.get('/api/auth/steam', passport.authenticate('steam', {failureRedirect: '/'}
     //var redirectionUrl = req.session.redirectionUrl || '/';
     //res.redirect(redirectionUrl);
 
-    res.redirect('/')
+    res.redirect('/adduser')
 });
 
 app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
     //var redirectionUrl = req.session.redirectionUrl || '/';
     //res.redirect(redirectionUrl);
 
-    res.redirect('/')
+    res.redirect('/adduser')
 });
    
