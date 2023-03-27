@@ -32,8 +32,8 @@ passport.serializeUser((user, done) => {
    passport.use(new SteamStrategy({
     //returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
     //realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
-    returnURL: 'https://game-sothis-backend.herokuapp.com/:' + port + '/api/auth/steam/return',
-    realm: 'https://game-sothis-backend.herokuapp.com/:' + port + '/',
+    returnURL: 'https://game-sothis-backend.herokuapp.com/api/auth/steam/return',
+    realm: 'https://game-sothis-backend.herokuapp.com/',
     apiKey: 'E3ECE458BA26350EAF264840A63BF51E'
     }, function (identifier, profile, done) {
      process.nextTick(function () {
