@@ -9,7 +9,7 @@ const { response } = require('express');
 var SteamStrategy = passportSteam.Strategy;
 var app = express();
 
-var port = 3080;
+var port = process.env.PORT || 3080;
 var userID = -1;
 
 app.use(cors())
@@ -30,8 +30,10 @@ passport.serializeUser((user, done) => {
    });
    // Initiate Strategy
    passport.use(new SteamStrategy({
-    returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
-    realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
+    //returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
+    //realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
+    returnURL: 'https://game-sothis-backend.herokuapp.com/:' + port + '/api/auth/steam/return',
+    realm: 'https://game-sothis-backend.herokuapp.com/:' + port + '/',
     apiKey: 'E3ECE458BA26350EAF264840A63BF51E'
     }, function (identifier, profile, done) {
      process.nextTick(function () {
@@ -72,7 +74,7 @@ app.get('/adduser', (req, res) => {
         //Location: 'http://localhost:3000'
         Location: "https://gamesothis.web.app"
     });
-    
+
     res.end(); 
 });
 
