@@ -4,7 +4,7 @@ var session = require('express-session');
 var passportSteam = require('passport-steam');
 var request = require('request');
 const axios = require('axios');
-//var cors = require('cors')
+var cors = require('cors')
 const { response } = require('express');
 var SteamStrategy = passportSteam.Strategy;
 var app = express();
@@ -12,12 +12,14 @@ var app = express();
 var port = 3080;
 var userID = -1;
 
-//app.use(cors())
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*"); 
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+app.use(cors())
+
+// For solving Cors error when using ngrox tunnel -- seems not work
+// app.use(function(req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*"); 
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//     next();
+// });
 
 // Required to get data from user for sessions
 passport.serializeUser((user, done) => {
@@ -58,7 +60,11 @@ app.listen(port, () => {
 });
 
 // Routes
-app.get('/', (req, res) => {
+app.get("/", (req, res) => {
+    res.send("Hello");
+});
+    
+app.get('/adduser', (req, res) => {
     userID = req.user['_json']['steamid'];
 
     //Redirect back to front end
@@ -66,6 +72,7 @@ app.get('/', (req, res) => {
         //Location: 'http://localhost:3000'
         Location: "https://gamesothis.web.app"
     });
+    
     res.end(); 
 });
 
