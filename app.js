@@ -4,7 +4,7 @@ var session = require('express-session');
 var passportSteam = require('passport-steam');
 var request = require('request');
 const axios = require('axios');
-var cors = require('cors')
+//var cors = require('cors')
 const { response } = require('express');
 var SteamStrategy = passportSteam.Strategy;
 var app = express();
@@ -12,7 +12,12 @@ var app = express();
 var port = 3080;
 var userID = -1;
 
-app.use(cors())
+//app.use(cors())
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*"); 
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 // Required to get data from user for sessions
 passport.serializeUser((user, done) => {
