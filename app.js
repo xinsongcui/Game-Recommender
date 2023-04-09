@@ -11,6 +11,7 @@ var app = express();
 
 var port = process.env.PORT || 3080;
 var userID = -1;
+var userName = "";
 
 app.use(cors())
 
@@ -24,22 +25,26 @@ app.use(cors())
 // Required to get data from user for sessions
 passport.serializeUser((user, done) => {
     done(null, user);
-   });
-   passport.deserializeUser((user, done) => {
+});
+
+passport.deserializeUser((user, done) => {
     done(null, user);
-   });
-   // Initiate Strategy
-   passport.use(new SteamStrategy({
-    //returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
-    //realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
-    returnURL: 'https://game-sothis-backend.herokuapp.com/api/auth/steam/return',
-    realm: 'https://game-sothis-backend.herokuapp.com/',
-    apiKey: 'E3ECE458BA26350EAF264840A63BF51E'
+});
+
+// Initiate Strategy
+passport.use(new SteamStrategy({
+        //returnURL: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/api/auth/steam/return',
+        //realm: 'http://ec2-54-197-97-107.compute-1.amazonaws.com:' + port + '/',
+        returnURL: 'http://localhost:' + port + '/api/auth/steam/return',
+        realm: 'http://localhost:' + port + '/',
+        //returnURL: 'https://game-sothis-backend.herokuapp.com/api/auth/steam/return',
+        //realm: 'https://game-sothis-backend.herokuapp.com/',
+        apiKey: 'E3ECE458BA26350EAF264840A63BF51E'
     }, function (identifier, profile, done) {
-     process.nextTick(function () {
-      profile.identifier = identifier;
-      return done(null, profile);
-     });
+        process.nextTick(function () {
+            profile.identifier = identifier;
+            return done(null, profile);
+        });
     }
 ));
 
@@ -63,16 +68,19 @@ app.listen(port, () => {
 
 // Routes
 app.get("/", (req, res) => {
-    res.send("Hello");
+    //res.send("Hello");
+    console.log(req.user);
+    res.send(req.user == null ? 'not logged in' : 'hello ' + req.user.displayName).end();
 });
     
 app.get('/adduser', (req, res) => {
     userID = req.user['_json']['steamid'];
+    userName = req.user['displayName']
 
     //Redirect back to front end
     res.writeHead(302, {
-        //Location: 'http://localhost:3000'
-        Location: "https://gamesothis.web.app"
+        Location: 'http://localhost:3000'
+        //Location: "https://gamesothis.web.app"
     });
 
     res.end(); 
@@ -105,11 +113,22 @@ app.get('/user', function(req, res) {
     // });
 });
 
+app.get('/logout', function(req, res) { 
+    userID = -1;
+    // req.logout();
+    // res.redirect('/user');
+    req.logout(function(err) {
+        if (err) { return next(err); }
+        res.redirect('http://localhost:3000');
+    });
+});
+
 app.get('/api/auth/steam', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
     //var redirectionUrl = req.session.redirectionUrl || '/';
     //res.redirect(redirectionUrl);
 
     res.redirect('/adduser')
+    //res.redirect('/')
 });
 
 app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirect: '/'}), function (req, res) {
@@ -117,5 +136,6 @@ app.get('/api/auth/steam/return', passport.authenticate('steam', {failureRedirec
     //res.redirect(redirectionUrl);
 
     res.redirect('/adduser')
+    //res.redirect('/')
 });
    
